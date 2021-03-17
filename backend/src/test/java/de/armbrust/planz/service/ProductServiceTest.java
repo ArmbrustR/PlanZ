@@ -57,25 +57,25 @@ class ProductServiceTest {
     @DisplayName("A not existing product should be added to db")
     public void testAddNotExistingProduct() {
         //GIVEN
-        Optional<Product> OptionalOfProductToAdd = Optional.of(Product.builder()
+        Optional<Product> optionalOfProductToAdd = Optional.of(Product.builder()
                 .sku("456")
                 .title("Product2")
                 .asin("EFG")
                 .build());
 
-        when(productMongoDb.existsById(OptionalOfProductToAdd.get().getSku())).thenReturn(false);
+        when(productMongoDb.existsById(optionalOfProductToAdd.get().getSku())).thenReturn(false);
 
         //WHEN
-        Optional<Product> actual = productService.addProduct(OptionalOfProductToAdd.get());
+        Optional<Product> actual = productService.addProduct(optionalOfProductToAdd.get());
 
         //THEN
-        verify(productMongoDb).save(OptionalOfProductToAdd.get());
+        verify(productMongoDb).save(optionalOfProductToAdd.get());
         assertTrue(actual.isPresent());
-        assertThat(actual, Matchers.is(OptionalOfProductToAdd));
+        assertThat(actual, Matchers.is(optionalOfProductToAdd));
     }
 
     @Test
-    @DisplayName("A existing product should be NOT added to db")
+    @DisplayName("An existing product should NOT be added to db")
     public void testAddExistingProduct() {
         //GIVEN
         Optional<Product> OptionalOfProductToAdd = Optional.of(Product.builder()

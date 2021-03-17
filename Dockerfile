@@ -1,6 +1,6 @@
 FROM openjdk:15
 
-MAINTAINER REM Java 21 1 <rafael.armbrust@gmail.com>
+MAINTAINER Rafael Armbrust <rafael.armbrust@gmail.com>
 
 ADD backend/target/github-bingo-master.jar app.jar
 
