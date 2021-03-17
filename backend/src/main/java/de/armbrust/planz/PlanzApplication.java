@@ -8,6 +8,6 @@ public class PlanzApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(PlanzApplication.class, args);
-    }
 
+    }
 }
