@@ -18,5 +18,10 @@ public class Product {
     private String sku;
     private String title;
     private String asin;
+    private String itemDescription;
+    private String imageUrl;
+    private String pendingQuantity;
+    private String price;
+    private String status;
 
 }

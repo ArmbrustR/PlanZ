@@ -1,9 +1,14 @@
 package de.armbrust.planz.service;
 
+import com.amazon.spapi.documents.exception.CryptoException;
+import com.amazon.spapi.documents.exception.HttpResponseException;
+import com.amazon.spapi.documents.exception.MissingCharsetException;
+import de.armbrust.planz.amazonapi.ReportsApiService;
 import de.armbrust.planz.db.ProductMongoDb;
 import de.armbrust.planz.model.Product;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,9 +16,11 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductMongoDb productMongoDb;
+    private final ReportsApiService reportsApiService;
 
-    public ProductService(ProductMongoDb productMongoDb) {
+    public ProductService(ProductMongoDb productMongoDb, ReportsApiService reportsApiService) {
         this.productMongoDb = productMongoDb;
+        this.reportsApiService = reportsApiService;
     }
 
     public List<Product> listProducts() {
@@ -26,6 +33,11 @@ public class ProductService {
             return Optional.of(product);
         }
         return Optional.empty();
+    }
+
+    public void UpdateProductDb() throws CryptoException, MissingCharsetException, HttpResponseException, IOException {
+        List<Product> productsFromApi = reportsApiService.getProductListFromAmazonApiReport();
+        productsFromApi.forEach(product -> productMongoDb.save(product));
     }
 
 }
