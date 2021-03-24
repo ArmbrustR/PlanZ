@@ -3,6 +3,7 @@ package de.armbrust.planz.service;
 import com.amazon.spapi.documents.exception.CryptoException;
 import com.amazon.spapi.documents.exception.HttpResponseException;
 import com.amazon.spapi.documents.exception.MissingCharsetException;
+import de.armbrust.planz.amazonapi.AmazonApiLogic;
 import de.armbrust.planz.amazonapi.ReportsApiService;
 import de.armbrust.planz.db.ProductMongoDb;
 import de.armbrust.planz.model.Product;
@@ -25,7 +26,8 @@ class ProductServiceTest {
 
     private final ProductMongoDb productMongoDb = mock(ProductMongoDb.class);
     private final ReportsApiService reportsApiService = mock(ReportsApiService.class);
-    private final ProductService productService = new ProductService(productMongoDb, reportsApiService);
+    private final AmazonApiLogic amazonApiLogic = mock(AmazonApiLogic.class);
+    private final ProductService productService = new ProductService(productMongoDb, reportsApiService, amazonApiLogic);
 
     @Test
     @DisplayName("List Products should return list from DB")
@@ -121,7 +123,7 @@ class ProductServiceTest {
         products.add(product1);
         products.add(product2);
 
-        when(reportsApiService.getProductListFromAmazonApiReport()).thenReturn(products);
+        when(amazonApiLogic.getProductsFromApiReport()).thenReturn(products);
 
         //WHEN
         productService.UpdateProductDb();

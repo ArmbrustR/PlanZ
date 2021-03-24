@@ -16,9 +16,10 @@ import static org.mockito.Mockito.when;
 class ReportsApiServiceTest {
 
     private final AppUserService appUserService = mock(AppUserService.class);
-    private final ReportsApi reportsApi = mock(ReportsApi.class);
-    private final ReportsApiService reportsApiService = new ReportsApiService(appUserService);
-
+    private final DownloadAndDecryptService downloadAndDecryptService = mock(DownloadAndDecryptService.class);
+    private final ReportParsingService reportParsingService = mock(ReportParsingService.class);
+    private final AuthBuilderService authBuilderService = mock(AuthBuilderService.class);
+    private final ReportsApiService reportsApiService = new ReportsApiService(appUserService, downloadAndDecryptService, reportParsingService, authBuilderService);
 
     @Test
     @DisplayName("Should return a reportsapi")
@@ -37,29 +38,33 @@ class ReportsApiServiceTest {
                 .endpoint("https://api.amazon.com/auth/o2/token")
                 .build();
 
-
         String mainAppUserId = "Rafael";
 
-        when(appUserService.findAppUserInAppUserDb(mainAppUserId)).thenReturn(AppUser.builder()
-                .accessKeyId("12345")
-                .secretKey("67890")
-                .clientId("9876")
-                .clientSecret("topsecret")
-                .password("tollespasswort")
-                .refreshToken("refreshtoken")
-                .region("europa")
-                .build());
+        AppUser mainAppUserDetails = AppUser.builder()
+                        .accessKeyId("12345")
+                        .secretKey("67890")
+                        .clientId("9876")
+                        .clientSecret("topsecret")
+                        .password("tollespasswort")
+                        .refreshToken("refreshtoken")
+                        .region("europa")
+                        .build();
 
+        when(appUserService.findAppUserInAppUserDb(mainAppUserId)).thenReturn(mainAppUserDetails);
+        when(authBuilderService.getAwsAuthenticationCredentials(mainAppUserDetails)).thenReturn(awsAuthenticationCredentials);
+        when(authBuilderService.getLwaAuthorizationCredentials(mainAppUserDetails)).thenReturn(lwaAuthorizationCredentials);
 
         //WHEN
         ReportsApi actual = reportsApiService.getReportsApi();
 
-        //THEN
-        assertThat(actual, Matchers.is(new ReportsApi.Builder()
+        ReportsApi expected = new ReportsApi.Builder()
                 .awsAuthenticationCredentials(awsAuthenticationCredentials)
                 .lwaAuthorizationCredentials(lwaAuthorizationCredentials)
                 .endpoint("https://sellingpartnerapi-eu.amazon.com")
-                .build()));
+                .build();
+
+        //THEN
+        assertThat(actual.getApiClient().getAuthentications(), Matchers.is(expected.getApiClient().getAuthentications()));
 
     }
 
