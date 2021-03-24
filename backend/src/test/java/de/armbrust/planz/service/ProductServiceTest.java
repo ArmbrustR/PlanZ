@@ -25,9 +25,8 @@ import static org.mockito.Mockito.*;
 class ProductServiceTest {
 
     private final ProductMongoDb productMongoDb = mock(ProductMongoDb.class);
-    private final ReportsApiService reportsApiService = mock(ReportsApiService.class);
     private final AmazonApiLogic amazonApiLogic = mock(AmazonApiLogic.class);
-    private final ProductService productService = new ProductService(productMongoDb, reportsApiService, amazonApiLogic);
+    private final ProductService productService = new ProductService(productMongoDb, amazonApiLogic);
 
     @Test
     @DisplayName("List Products should return list from DB")

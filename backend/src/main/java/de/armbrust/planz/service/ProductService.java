@@ -17,12 +17,10 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductMongoDb productMongoDb;
-    private final ReportsApiService reportsApiService;
     private final AmazonApiLogic amazonApiLogic;
 
-    public ProductService(ProductMongoDb productMongoDb, ReportsApiService reportsApiService, AmazonApiLogic amazonApiLogic) {
+    public ProductService(ProductMongoDb productMongoDb, AmazonApiLogic amazonApiLogic) {
         this.productMongoDb = productMongoDb;
-        this.reportsApiService = reportsApiService;
         this.amazonApiLogic = amazonApiLogic;
     }
 

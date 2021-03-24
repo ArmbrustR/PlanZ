@@ -49,7 +49,6 @@ public class ReportsApiService {
         LWAAuthorizationCredentials lwaAuthorizationCredentials = authBuilderService.getLwaAuthorizationCredentials(mainAppUserDetails);
 
         ReportsApi reportsApi = BuildReportsApi(awsAuthenticationCredentials, lwaAuthorizationCredentials);
-
         return reportsApi;
     }
 
@@ -72,8 +71,7 @@ public class ReportsApiService {
             return reportId;
 
         } catch (ApiException e) {
-            log.warn(e.getMessage());
-            return null;
+            throw new RuntimeException("Error in createReportAndGetReportID", e);
         }
     }
 
@@ -92,8 +90,7 @@ public class ReportsApiService {
             return reportsDocumentDownloadInformations;
 
         } catch (ApiException | InterruptedException e) {
-            log.warn(e.getMessage());
-            return null;
+            throw new RuntimeException("Error in getDownloadInformationsForReport", e);
         }
     }
 }

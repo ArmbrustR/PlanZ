@@ -16,30 +16,35 @@ import java.util.List;
 @Slf4j
 public class ReportParsingService {
 
-    public List<Product> readFileAndExtractProducts(DownloadBundle downloadBundle) throws MissingCharsetException, IOException, CryptoException {
-        BufferedReader bufferedReader = downloadBundle.newBufferedReader();
+    public List<Product> readFileAndExtractProducts(DownloadBundle downloadBundle) {
 
-        String line;
-        List<Product> products = new ArrayList<Product>();
+        try (BufferedReader bufferedReader = downloadBundle.newBufferedReader()) {
 
-        while ((line = bufferedReader.readLine()) != null) {
-            String[] content = line.split("\t");
+            String line;
+            List<Product> products = new ArrayList<Product>();
 
-            Product tempProduct = new Product().builder()
-                    .sku(content[3])
-                    .title(content[0])
-                    .asin(content[16])
-                    .itemDescription(content[1])
-                    .imageUrl(content[7])
-                    .pendingQuantity(content[25])
-                    .price(content[4])
-                    .status(content[28])
-                    .build();
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] content = line.split("\t");
 
-            products.add(tempProduct);
+                Product tempProduct = new Product().builder()
+                        .sku(content[3])
+                        .title(content[0])
+                        .asin(content[16])
+                        .itemDescription(content[1])
+                        .imageUrl(content[7])
+                        .pendingQuantity(content[25])
+                        .price(content[4])
+                        .status(content[28])
+                        .build();
+
+                products.add(tempProduct);
+            }
+
+            downloadBundle.close();
+            return products;
+
+        } catch (MissingCharsetException | IOException | CryptoException e) {
+            throw new RuntimeException("Error in getDecryptedDownloadBundle", e);
         }
-
-        downloadBundle.close();
-        return products;
     }
 }

@@ -29,8 +29,13 @@ public class ProductController {
         return productService.listProducts();
     }
 
-    @GetMapping("update")  // This method should be scheduled later in an "scheduling class"
-    public void updateDatabaseFromReportsApi () throws CryptoException, MissingCharsetException, HttpResponseException, IOException {
-        productService.UpdateProductDb();
+    @GetMapping("update")  // This method should be scheduled later (once a day) in an "scheduling class"
+    public void updateDatabaseFromReportsApi () {
+        try {
+            productService.UpdateProductDb();
+        } catch (MissingCharsetException | IOException | HttpResponseException | CryptoException e) {
+            throw new RuntimeException("Error in updateDatabaseFromReportsApi", e);
+        }
+
     }
 }
