@@ -2,7 +2,6 @@ import styled from 'styled-components/macro';
 
 export default function AppHeader() {
 
-
     return (
         <Header>
             <h1>Inventory Management</h1>

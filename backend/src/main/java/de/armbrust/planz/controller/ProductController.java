@@ -36,6 +36,5 @@ public class ProductController {
         } catch (MissingCharsetException | IOException | HttpResponseException | CryptoException e) {
             throw new RuntimeException("Error in updateDatabaseFromReportsApi", e);
         }
-
     }
 }
