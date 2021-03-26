@@ -63,7 +63,8 @@ public class ReportsApiService {
         return createdReportSpecification;
     }
 
-    public String createReportAndGetReportID(ReportsApi reportsApi) {
+    public String createReportAndGetReportID() {
+        ReportsApi reportsApi = getReportsApi();
         CreateReportSpecification reportSpecification = getReportSpecifications();
 
         try {
