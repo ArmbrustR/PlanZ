@@ -34,11 +34,6 @@
         </dependency>
         <dependency>
             <groupId>com.amazon.sellingpartnerapi</groupId>
-            <artifactId>sellingpartnerapi-aa-java</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.amazon.sellingpartnerapi</groupId>
             <artifactId>sellingpartner-api-documents-helper-java</artifactId>
             <version>1.0</version>
         </dependency>
