@@ -1,6 +1,7 @@
 package de.armbrust.planz.amazonapi;
 
 import com.amazon.SellingPartnerAPIAA.AWSAuthenticationCredentials;
+import com.amazon.SellingPartnerAPIAA.AWSAuthenticationCredentialsProvider;
 import com.amazon.SellingPartnerAPIAA.LWAAuthorizationCredentials;
 import de.armbrust.planz.security.AppUser;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,14 @@ public class AuthBuilderService {
                 .build();
 
         return awsAuthenticationCredentials;
+    }
+
+    public AWSAuthenticationCredentialsProvider getAwsAuthenticationCredentialsProvider (AppUser mainAppUserDetails) {
+        AWSAuthenticationCredentialsProvider awsAuthenticationCredentialsProvider = AWSAuthenticationCredentialsProvider.builder()
+                .roleArn(mainAppUserDetails.getRoleArn())
+                .roleSessionName(mainAppUserDetails.getRoleSessionName())
+                .build();
+        return awsAuthenticationCredentialsProvider;
     }
 
     public LWAAuthorizationCredentials getLwaAuthorizationCredentials(AppUser mainAppUserDetails) {

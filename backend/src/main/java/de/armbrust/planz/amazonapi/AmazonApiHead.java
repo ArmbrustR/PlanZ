@@ -22,11 +22,24 @@ public class AmazonApiHead {
 
     public List<Product> getProductsFromApiReport() {
         ReportsApi reportsApi = reportsApiService.getReportsApi();
-        String reportsId = reportsApiService.createReportAndGetReportID();
+        String reportsId = reportsApiService.createReportAndGetReportID("GET_MERCHANT_LISTINGS_ALL_DATA");
         ReportDocument reportDownloadInformations = reportsApiService.getDownloadInformationsForReport(reportsId, reportsApi);
         DownloadBundle downloadBundle = downloadAndDecryptService.getDecryptedDownloadBundle(reportDownloadInformations);
         List<Product> products = reportParsingService.readFileAndExtractProducts(downloadBundle);
 
         return products;
     }
+
+    public List<Product> getCurrentInventoryFromApiReport() {
+        ReportsApi reportsApi = reportsApiService.getReportsApi();
+        String reportsId = reportsApiService.createReportAndGetReportID("GET_FBA_FULFILLMENT_MONTHLY_INVENTORY_DATA");
+        ReportDocument reportDownloadInformations = reportsApiService.getDownloadInformationsForReport(reportsId, reportsApi);
+        DownloadBundle downloadBundle = downloadAndDecryptService.getDecryptedDownloadBundle(reportDownloadInformations);
+        List<Product> products = reportParsingService.readFileAndExtractProducts(downloadBundle);
+
+        return products;
+    }
+
+
+
 }
