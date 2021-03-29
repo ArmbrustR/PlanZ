@@ -3,6 +3,8 @@ package de.armbrust.planz.controller;
 import com.amazon.spapi.documents.exception.CryptoException;
 import com.amazon.spapi.documents.exception.HttpResponseException;
 import com.amazon.spapi.documents.exception.MissingCharsetException;
+import de.armbrust.planz.amazonapi.AmazonApiHead;
+import de.armbrust.planz.amazonapi.ReportsApiService;
 import de.armbrust.planz.model.Product;
 import de.armbrust.planz.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,12 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final AmazonApiHead amazonApiHead;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, AmazonApiHead amazonApiHead) {
         this.productService = productService;
+        this.amazonApiHead = amazonApiHead;
     }
 
     @GetMapping
@@ -37,4 +41,11 @@ public class ProductController {
             throw new RuntimeException("Error in updateDatabaseFromReportsApi", e);
         }
     }
+
+    @GetMapping("inventory")
+    public List<Product> getInventoryFromReportsApi () {
+        List<Product> reportResponse = amazonApiHead.getCurrentInventoryFromApiReport();
+        return reportResponse;
+    }
+
 }

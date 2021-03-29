@@ -21,7 +21,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -34,12 +33,12 @@
         </dependency>
         <dependency>
             <groupId>com.amazon.sellingpartnerapi</groupId>
-            <artifactId>sellingpartnerapi-aa-java</artifactId>
+            <artifactId>sellingpartner-api-documents-helper-java</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>com.amazon.sellingpartnerapi</groupId>
-            <artifactId>sellingpartner-api-documents-helper-java</artifactId>
+            <artifactId>sellingpartnerapi-aa-java</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
