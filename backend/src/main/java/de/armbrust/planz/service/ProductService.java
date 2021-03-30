@@ -40,8 +40,8 @@ public class ProductService {
         return Optional.empty();
     }
 
-    public void saveProductOnlyIfNotPresent (Product product) {
-        if(!productMongoDb.findById(product.getSku()).isPresent()) {
+    public void saveProductOnlyIfNotPresent(Product product) {
+        if (!productMongoDb.findById(product.getSku()).isPresent()) {
             productMongoDb.save(product);
         }
     }
@@ -49,7 +49,7 @@ public class ProductService {
     public void initializeProductsOnDb() throws CryptoException, MissingCharsetException, HttpResponseException, IOException {
         List<Product> productsFromApi = amazonApiHead.getProductsFromApiReport();
         productsFromApi.forEach(product -> saveProductOnlyIfNotPresent(product));
-    }git git
+    }
 
     public void findProductAndAddInventory(Inventory inventory) {
         Optional<Product> product = productMongoDb.findById(inventory.getSku());

@@ -51,7 +51,7 @@ public class ProductController {
     }
 
     @GetMapping("updateInventory")
-    public void UpdateInventoryFromLocalFile () {
+    public void UpdateInventoryFromLocalFile() {
         productService.updateInventoryData();
     }
 

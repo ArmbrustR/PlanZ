@@ -1,7 +1,7 @@
 package de.armbrust.planz.service;
+
 import de.armbrust.planz.model.Inventory;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.stereotype.Service;
 
 
@@ -27,7 +27,7 @@ public class LocalFileReader {
 
         try (BufferedReader bufferedReader = Files.newBufferedReader(path)) {
             String line;
-            String[] content ={};
+            String[] content = {};
             List<Inventory> inventoryList = new ArrayList<>();
 
             line = bufferedReader.readLine();
