@@ -8,7 +8,6 @@ import de.armbrust.planz.db.ProductMongoDb;
 import de.armbrust.planz.model.Inventory;
 import de.armbrust.planz.model.Product;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -127,7 +126,7 @@ class ProductServiceTest {
         when(amazonApiHead.getProductsFromApiReport()).thenReturn(products);
 
         //WHEN
-        productService.updateProductDb();
+        productService.initializeProductsOnDb();
 
         //THEN
         verify(productMongoDb).save(product1);

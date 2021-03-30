@@ -4,7 +4,6 @@ import com.amazon.spapi.documents.exception.CryptoException;
 import com.amazon.spapi.documents.exception.HttpResponseException;
 import com.amazon.spapi.documents.exception.MissingCharsetException;
 import de.armbrust.planz.amazonapi.AmazonApiHead;
-import de.armbrust.planz.model.Inventory;
 import de.armbrust.planz.model.Product;
 import de.armbrust.planz.service.LocalFileReader;
 import de.armbrust.planz.service.ProductService;
@@ -39,7 +38,7 @@ public class ProductController {
     @GetMapping("update")  // This method should be scheduled later (once a day) in an "scheduling class"
     public void updateDatabaseFromReportsApi() {
         try {
-            productService.updateProductDb();
+            productService.initializeProductsOnDb();
         } catch (MissingCharsetException | IOException | HttpResponseException | CryptoException e) {
             throw new RuntimeException("Error in updateDatabaseFromReportsApi", e);
         }
@@ -49,12 +48,6 @@ public class ProductController {
     public List<Product> getInventoryFromReportsApi() {
         List<Product> reportResponse = amazonApiHead.getCurrentInventoryFromApiReport();
         return reportResponse;
-    }
-
-    @GetMapping("localFile")
-    public List<Inventory> getDataFromLocalFile() {
-        List<Inventory> inventoryFromFile = localFileReader.getInventoryFromLocalReport();
-        return inventoryFromFile;
     }
 
     @GetMapping("updateInventory")
