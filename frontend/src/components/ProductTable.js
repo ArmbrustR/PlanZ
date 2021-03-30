@@ -1,18 +1,17 @@
 import {getProducts} from "../services/ProductApiService";
 import {useEffect, useState} from "react";
-import * as React from "react";
 
-export default function () {
-    const [productData, setProductData] = useState([])
+export default function showProductsInTable () {
+    const [productsArray, setProductsArray] = useState([])
 
     useEffect(() => {
         getProducts()
-            .then(setProductData)
+            .then(setProductsArray)
             .catch((error) => console.error(error))
     }, [])
 
 
-    const rows = productData.map((product) => {
+    const rows = productsArray.map((product) => {
         return (
             <tr key={product.sku}>
                 <td>{product.sku}</td>
