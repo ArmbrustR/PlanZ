@@ -13,6 +13,5 @@ const Header = styled.header`
   h1 {
     padding: 8px;
     text-align: center;
-    font-size: 2em;
     color: black;
   }`

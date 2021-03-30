@@ -18,8 +18,8 @@ const PageLayout = styled.div`
   display: grid;
   grid-template-rows: auto 1fr;
   align-content: center;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
 
   background: #E9E8E8;`
 
