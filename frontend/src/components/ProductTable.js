@@ -1,7 +1,8 @@
 import {getProducts} from "../services/ProductApiService";
 import {useEffect, useState} from "react";
+import InventoryChart from "./InventoryChart";
 
-export default function showProductsInTable () {
+export default function ShowProductsInTable () {
     const [productsArray, setProductsArray] = useState([])
 
     useEffect(() => {
@@ -16,7 +17,9 @@ export default function showProductsInTable () {
             <tr key={product.sku}>
                 <td>{product.sku}</td>
                 <td>{product.title}</td>
-                <td>{product.itemDescription}</td>
+                <td>
+                    {product.inventory && <InventoryChart product={product} />}
+                </td>
             </tr>
         )
     })
@@ -28,7 +31,7 @@ export default function showProductsInTable () {
                     <th>image</th>
                     <th>asin</th>
                     <th>title</th>
-                    <th>inventoryAlert</th>
+                    <th>inventoryChart</th>
                     <th>expectedSales</th>
                 </tr>
             </thead>
