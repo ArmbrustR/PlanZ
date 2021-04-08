@@ -1,18 +1,18 @@
 package de.armbrust.planz.amazonapi;
 
 import com.amazon.SellingPartnerAPIAA.AWSAuthenticationCredentials;
-import com.amazon.SellingPartnerAPIAA.AWSAuthenticationCredentialsProvider;
 import com.amazon.SellingPartnerAPIAA.LWAAuthorizationCredentials;
 import com.amazon.sellingpartner.ApiException;
 import com.amazon.sellingpartner.api.ReportsApi;
-import com.amazon.sellingpartner.model.*;
+import com.amazon.sellingpartner.model.CreateReportSpecification;
+import com.amazon.sellingpartner.model.Report;
+import com.amazon.sellingpartner.model.ReportDocument;
 import de.armbrust.planz.security.AppUser;
 import de.armbrust.planz.service.AppUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,11 +33,11 @@ public class ReportsApiService {
         this.authBuilderService = authBuilderService;
     }
 
-    public ReportsApi BuildReportsApi(AWSAuthenticationCredentials awsAuthenticationCredentials, LWAAuthorizationCredentials lwaAuthorizationCredentials, AWSAuthenticationCredentialsProvider awsAuthenticationCredentialsProvider) {
+    public ReportsApi BuildReportsApi(AWSAuthenticationCredentials awsAuthenticationCredentials, LWAAuthorizationCredentials lwaAuthorizationCredentials) {
 
         ReportsApi reportsApi = new ReportsApi.Builder()
                 .awsAuthenticationCredentials(awsAuthenticationCredentials)
-                .lwaAuthorizationCredentials(lwaAuthorizationCredentials).awsAuthenticationCredentialsProvider(awsAuthenticationCredentialsProvider)
+                .lwaAuthorizationCredentials(lwaAuthorizationCredentials)
                 .endpoint("https://sellingpartnerapi-eu.amazon.com")
                 .build();
 
@@ -49,9 +49,8 @@ public class ReportsApiService {
         AppUser mainAppUserDetails = appUserService.findAppUserInAppUserDb(mainAppUserId);
         AWSAuthenticationCredentials awsAuthenticationCredentials = authBuilderService.getAwsAuthenticationCredentials(mainAppUserDetails);
         LWAAuthorizationCredentials lwaAuthorizationCredentials = authBuilderService.getLwaAuthorizationCredentials(mainAppUserDetails);
-        AWSAuthenticationCredentialsProvider awsAuthenticationCredentialsProvider = authBuilderService.getAwsAuthenticationCredentialsProvider(mainAppUserDetails);
 
-        ReportsApi reportsApi = BuildReportsApi(awsAuthenticationCredentials, lwaAuthorizationCredentials, awsAuthenticationCredentialsProvider);
+        ReportsApi reportsApi = BuildReportsApi(awsAuthenticationCredentials, lwaAuthorizationCredentials);
         return reportsApi;
     }
 
@@ -59,14 +58,9 @@ public class ReportsApiService {
         List<String> marketplaceList = new ArrayList<String>();
         marketplaceList.add("A1PA6795UKMFR9");
 
-        OffsetDateTime startTime = OffsetDateTime.parse("2021-01-01T12:00:00+03:30");
-        OffsetDateTime endTime = OffsetDateTime.parse("2021-01-03T12:00:00+03:30");
-
         CreateReportSpecification createdReportSpecification = new CreateReportSpecification();
         createdReportSpecification.setMarketplaceIds(marketplaceList);
         createdReportSpecification.setReportType(reportsType);
-        createdReportSpecification.setDataStartTime(startTime);
-        createdReportSpecification.setDataEndTime(endTime);
 
         return createdReportSpecification;
     }

@@ -3,12 +3,15 @@ package de.armbrust.planz.controller;
 import com.amazon.spapi.documents.exception.CryptoException;
 import com.amazon.spapi.documents.exception.HttpResponseException;
 import com.amazon.spapi.documents.exception.MissingCharsetException;
-import de.armbrust.planz.amazonapi.AmazonApiHead;
+import de.armbrust.planz.model.AsinDto;
 import de.armbrust.planz.model.Product;
-import de.armbrust.planz.service.LocalFileReader;
+import de.armbrust.planz.model.Sale;
+import de.armbrust.planz.service.AsinService;
 import de.armbrust.planz.service.ProductService;
+import de.armbrust.planz.service.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,14 +23,14 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    private final AmazonApiHead amazonApiHead;
-    private final LocalFileReader localFileReader;
+    private final SalesService salesService;
+    private final AsinService asinService;
 
     @Autowired
-    public ProductController(ProductService productService, AmazonApiHead amazonApiHead, LocalFileReader localFileReader) {
+    public ProductController(ProductService productService, SalesService salesService, AsinService asinService) {
         this.productService = productService;
-        this.amazonApiHead = amazonApiHead;
-        this.localFileReader = localFileReader;
+        this.salesService = salesService;
+        this.asinService = asinService;
     }
 
     @GetMapping
@@ -35,7 +38,7 @@ public class ProductController {
         return productService.listProducts();
     }
 
-    @GetMapping("update")  // This method should be scheduled later (once a day) in an "scheduling class"
+    @GetMapping("update")
     public void updateDatabaseFromReportsApi() {
         try {
             productService.initializeProductsOnDb();
@@ -44,16 +47,29 @@ public class ProductController {
         }
     }
 
-    @GetMapping("inventory")
-    public List<Product> getInventoryFromReportsApi() {
-        List<Product> reportResponse = amazonApiHead.getCurrentInventoryFromApiReport();
-        return reportResponse;
-    }
-
     @GetMapping("updateInventory")
     public void UpdateInventoryFromLocalFile() {
         productService.updateInventoryData();
     }
 
+    @GetMapping("asins")
+    public List<AsinDto> getAsinDtoList() {
+        return asinService.getProductsAsinBased();
+    }
+
+    @GetMapping("calc")
+    public List<Sale> calcExpectedSalesForOneAsin() {
+        return asinService.getListWithSalesToRemoveBecauseLowInventory("B07MSLVVNB");
+    }
+
+    @GetMapping("updateSales")
+    public void updateSalesDbFromLocalFile() {
+        salesService.saveSalesFromLocalFileToDb();
+    }
+
+    @GetMapping("expected/{asin}")
+    public double getExpectedSalesForOneAsin(@PathVariable String asin) {
+        return asinService.getExpectedSalesForOneAsin(asin);
+    }
 
 }

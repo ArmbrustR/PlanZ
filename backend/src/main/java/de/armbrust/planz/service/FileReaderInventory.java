@@ -2,8 +2,8 @@ package de.armbrust.planz.service;
 
 import de.armbrust.planz.model.Inventory;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class LocalFileReader {
+public class FileReaderInventory {
 
     public Path getLocalFilePath() {
         Path path = Paths.get("/Users/rafael.armbrust/Java-Bootcamp/Abschlussprojekt/PlanZ/InventoryTextTabstop.txt");
@@ -39,7 +39,7 @@ public class LocalFileReader {
                 if (content.length == 7) {
 
                     Inventory inventory = Inventory.builder()
-                            .date(content[0])
+                            .date(StringUtils.substring(content[0], 0, 10))
                             .asin(content[1])
                             .sku(content[2])
                             .amount(content[3])

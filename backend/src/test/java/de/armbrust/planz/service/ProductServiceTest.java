@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -25,8 +26,8 @@ class ProductServiceTest {
 
     private final ProductMongoDb productMongoDb = mock(ProductMongoDb.class);
     private final AmazonApiHead amazonApiHead = mock(AmazonApiHead.class);
-    private final LocalFileReader localFileReader = mock(LocalFileReader.class);
-    private final ProductService productService = new ProductService(productMongoDb, amazonApiHead, localFileReader);
+    private final FileReaderInventory fileReaderInventory = mock(FileReaderInventory.class);
+    private final ProductService productService = new ProductService(productMongoDb, amazonApiHead, fileReaderInventory);
 
 
     @Test

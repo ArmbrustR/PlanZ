@@ -10,7 +10,10 @@ export default function AppHeader() {
 }
 
 const Header = styled.header`
+  background-color: orange;
+  
   h1 {
+    border-width: 4px;
     padding: 8px;
     text-align: center;
     color: black;
