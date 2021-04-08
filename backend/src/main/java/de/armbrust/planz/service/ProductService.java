@@ -76,7 +76,7 @@ public class ProductService {
                         .amount(entry.getValue())
                         .build()).collect(Collectors.toList());
 
-        List<InventoryDto> sortedInventoryList = getInventoryListSortedByDate(inventoryDtoList);
+        List<InventoryDto> sortedInventoryList = sortInventoryDtoListByDate(inventoryDtoList);
 
         return sortedInventoryList;
     }
@@ -99,14 +99,13 @@ public class ProductService {
         return InventoryDtoWithParsedDate;
     }
 
-    public List<InventoryDto> getInventoryListSortedByDate(List<InventoryDto> inventoryDtoList) {
+    public List<InventoryDto> sortInventoryDtoListByDate(List<InventoryDto> inventoryDtoList) {
         inventoryDtoList.sort((InventoryDto o1, InventoryDto o2) -> {
             try {
                 Date date1 = DateFormat.getDateInstance().parse(o1.getDate());
                 Date date2 = DateFormat.getDateInstance().parse(o2.getDate());
                 return date1.compareTo(date2);
             } catch (ParseException e) {
-                e.printStackTrace();
                 return 0;
             }
         });
@@ -151,8 +150,7 @@ public class ProductService {
     }
 
     public String getTitleByAsin(String asin) {
-        Product product = productMongoDb.findFirstByAsin(asin);
-        return product.getTitle();
+        return productMongoDb.findFirstByAsin(asin).getTitle();
     }
 
 }

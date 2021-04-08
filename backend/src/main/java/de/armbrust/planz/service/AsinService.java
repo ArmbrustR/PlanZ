@@ -57,7 +57,7 @@ public class AsinService {
         return updatedAsinDtoList;
     }
 
-    public List<String> getListOfDatesOfLowInventory(List<InventoryDto> inventoryDtoList) {
+    public List<String> getListOfDatesWithLowInventory(List<InventoryDto> inventoryDtoList) {
 
         List<InventoryDto> inventoryDtoWithLowInventory = inventoryDtoList.stream()
                 .filter(inventory -> inventory.getAmount() < 10).collect(Collectors.toList());
@@ -71,7 +71,7 @@ public class AsinService {
 
     public List<Sale> getListWithSalesFromDaysWithGoodInventory(String asin) {
         List<InventoryDto> inventoryDtoList = productService.getInventoryDtoForOneAsin(asin);
-        List<String> datesOfLowInventory = getListOfDatesOfLowInventory(inventoryDtoList);
+        List<String> datesOfLowInventory = getListOfDatesWithLowInventory(inventoryDtoList);
         List<Sale> allSalesByOneAsinToRemoveSales = salesService.getSalesFromOneAsinSortedByDate(asin);
         List<Sale> salesToRemoveList = new ArrayList<>();
 
