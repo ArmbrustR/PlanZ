@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.TimeZone;
 
 public class DateFormatHelper {
 
@@ -21,20 +20,12 @@ public class DateFormatHelper {
     }
 
     public String parseDateFromDDMMYYYYtoUTC(String dateToParse) throws ParseException {
-/*
-        SimpleDateFormat inputFormat = new SimpleDateFormat("dd.MM.yyyy");
-        Date date = inputFormat.parse(dateToParse);
-        long timestamp = date.getTime();
-        String timeStampAsString = String.valueOf(timestamp);
-*/
-
-
+        
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd.MM.yyyy");
         Date tempDate = inputFormat.parse(dateToParse);
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String stringDate = sdf.format(tempDate);
 
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String stringDate = outputFormat.format(tempDate);
 
         return stringDate;
     }
