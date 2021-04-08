@@ -22,6 +22,10 @@ export default function SalesChart({product}) {
         ], []
     )
 
+    if (product.sales.length === 0) {
+        return null
+    }
+
     return (
         <Wrapper>
             <Chart data={data} axes={axes} tooltip/>

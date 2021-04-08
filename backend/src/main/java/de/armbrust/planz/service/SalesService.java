@@ -24,10 +24,6 @@ public class SalesService {
         this.saleMongoDb = saleMongoDb;
     }
 
-    public List<Sale> getAllSalesFromOneAsinGroupedByDate(String asin) {
-        return saleMongoDb.findAllByAsin(asin);
-    }
-
     public List<Sale> getSalesFromOneAsinSortedByDate(String asin) {
         List<Sale> salesFromAsinList = saleMongoDb.findAllByAsin(asin);
 

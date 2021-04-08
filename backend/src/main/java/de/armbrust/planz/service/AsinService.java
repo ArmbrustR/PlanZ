@@ -26,8 +26,8 @@ public class AsinService {
     }
 
     public Integer getExpectedSalesForOneAsin(String asin) {
-        List<Sale> salesToRemove = getListWithSalesToRemoveBecauseLowInventory(asin);
-        List<Sale> salesFromAsinList = salesService.getAllSalesFromOneAsinGroupedByDate(asin);
+        List<Sale> salesToRemove = getListWithSalesFromDaysWithGoodInventory(asin);
+        List<Sale> salesFromAsinList = salesService.getSalesFromOneAsinSortedByDate(asin);
 
         Integer countOfDays = salesFromAsinList.size();
 
@@ -49,38 +49,43 @@ public class AsinService {
                 .sales(salesService.getSalesFromOneAsinSortedByDateFrontendDateFormat(asin))
                 .expectedSales(getExpectedSalesForOneAsin(asin))
                 .differenceFromExpectedSalesToActualSales(getDifferenceFromExpectedSalesToActualSales(asin))
-                .title(productService.getNameByAsin(asin))
+                .title(productService.getTitleByAsin(asin))
                 .build()).collect(Collectors.toList());
 
         List<AsinDto> updatedAsinDtoList = asinDtoList.stream().filter(asinDto -> asinDto.calcMaxInventoryAmount() >= 50).collect(Collectors.toList());
-        List<AsinDto> asinDtoListSortedByMinInventory = productService.getAsinDtoListSortedMinInventory(updatedAsinDtoList);
 
-        return asinDtoListSortedByMinInventory;
+        return updatedAsinDtoList;
     }
 
+    public List<String> getListOfDatesOfLowInventory(List<InventoryDto> inventoryDtoList) {
 
-    public List<Sale> getListWithSalesToRemoveBecauseLowInventory(String asin) {
-        List<InventoryDto> inventoryDtoList = productService.getInventoryDtoForOneAsin(asin);
         List<InventoryDto> inventoryDtoWithLowInventory = inventoryDtoList.stream()
                 .filter(inventory -> inventory.getAmount() < 10).collect(Collectors.toList());
         List<String> datesOfLowInventory = new ArrayList<>();
 
         inventoryDtoWithLowInventory.stream().forEach(inventoryDto -> datesOfLowInventory.add(inventoryDto.getDate()));
 
-        List<Sale> allSalesByOneAsin = salesService.getAllSalesFromOneAsinGroupedByDate(asin);
+        return datesOfLowInventory;
+    }
+
+
+    public List<Sale> getListWithSalesFromDaysWithGoodInventory(String asin) {
+        List<InventoryDto> inventoryDtoList = productService.getInventoryDtoForOneAsin(asin);
+        List<String> datesOfLowInventory = getListOfDatesOfLowInventory(inventoryDtoList);
+        List<Sale> allSalesByOneAsinToRemoveSales = salesService.getSalesFromOneAsinSortedByDate(asin);
         List<Sale> salesToRemoveList = new ArrayList<>();
 
         if (!datesOfLowInventory.isEmpty()) {
             datesOfLowInventory.stream().forEach(date -> {
-                allSalesByOneAsin.stream().forEach(sale -> {
+                allSalesByOneAsinToRemoveSales.stream().forEach(sale -> {
                     if (sale.getDate().equals(date)) {
                         salesToRemoveList.add(sale);
                     }
                 });
             });
             if (!salesToRemoveList.isEmpty()) {
-                salesToRemoveList.stream().forEach(saleToRemove -> allSalesByOneAsin.remove(saleToRemove));
-                return allSalesByOneAsin;
+                salesToRemoveList.stream().forEach(saleToRemove -> allSalesByOneAsinToRemoveSales.remove(saleToRemove));
+                return allSalesByOneAsinToRemoveSales;
             }
 
         }
@@ -88,8 +93,7 @@ public class AsinService {
     }
 
     public Integer getActualSalesForOneAsin(String asin) {
-        List<Sale> salesFromAsinList = salesService.getAllSalesFromOneAsinGroupedByDate(asin);
-
+        List<Sale> salesFromAsinList = salesService.getSalesFromOneAsinSortedByDate(asin);
         return salesFromAsinList.stream().mapToInt(sale -> sale.getQuantity()).sum();
     }
 

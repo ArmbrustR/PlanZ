@@ -4,14 +4,11 @@ import com.amazon.spapi.documents.exception.CryptoException;
 import com.amazon.spapi.documents.exception.HttpResponseException;
 import com.amazon.spapi.documents.exception.MissingCharsetException;
 import de.armbrust.planz.model.AsinDto;
-import de.armbrust.planz.model.Product;
-import de.armbrust.planz.model.Sale;
 import de.armbrust.planz.service.AsinService;
 import de.armbrust.planz.service.ProductService;
 import de.armbrust.planz.service.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,11 +30,6 @@ public class ProductController {
         this.asinService = asinService;
     }
 
-    @GetMapping
-    public List<Product> listProducts() {
-        return productService.listProducts();
-    }
-
     @GetMapping("update")
     public void updateDatabaseFromReportsApi() {
         try {
@@ -45,6 +37,11 @@ public class ProductController {
         } catch (MissingCharsetException | IOException | HttpResponseException | CryptoException e) {
             throw new RuntimeException("Error in updateDatabaseFromReportsApi", e);
         }
+    }
+
+    @GetMapping("updateSales")
+    public void updateSalesDbFromLocalFile() {
+        salesService.saveSalesFromLocalFileToDb();
     }
 
     @GetMapping("updateInventory")
@@ -55,21 +52,6 @@ public class ProductController {
     @GetMapping("asins")
     public List<AsinDto> getAsinDtoList() {
         return asinService.getProductsAsinBased();
-    }
-
-    @GetMapping("calc")
-    public List<Sale> calcExpectedSalesForOneAsin() {
-        return asinService.getListWithSalesToRemoveBecauseLowInventory("B07MSLVVNB");
-    }
-
-    @GetMapping("updateSales")
-    public void updateSalesDbFromLocalFile() {
-        salesService.saveSalesFromLocalFileToDb();
-    }
-
-    @GetMapping("expected/{asin}")
-    public double getExpectedSalesForOneAsin(@PathVariable String asin) {
-        return asinService.getExpectedSalesForOneAsin(asin);
     }
 
 }

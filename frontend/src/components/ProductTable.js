@@ -14,6 +14,9 @@ export default function ShowProductsInTable() {
             .catch((error) => console.error(error))
     }, [])
 
+    asinProductList.sort(function (a, b) {
+        return b.differenceFromExpectedSalesToActualSales - a.differenceFromExpectedSalesToActualSales;
+    })
 
     const sortChance = () => {
         setAsinProductList(
@@ -22,6 +25,7 @@ export default function ShowProductsInTable() {
             })
         )
     }
+
 
     const sortExpected = () => {
         setAsinProductList(
@@ -92,10 +96,6 @@ const Wrapper = styled.div`
     font-family: "Open Sans";
     outline: none;
   }
-
-  button:hover {
-  }
-
 
   th {
     background-color: orange;

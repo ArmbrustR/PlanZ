@@ -12,7 +12,7 @@ export default function InventoryChart({product}) {
                     primary: item.date,
                     secondary: item.amount,
                 }))
-            }], [product.inventory]
+            }], [product]
     )
 
     const axes = React.useMemo(

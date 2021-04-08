@@ -5,7 +5,6 @@ import com.amazon.spapi.documents.exception.HttpResponseException;
 import com.amazon.spapi.documents.exception.MissingCharsetException;
 import de.armbrust.planz.amazonapi.AmazonApiHead;
 import de.armbrust.planz.db.ProductMongoDb;
-import de.armbrust.planz.model.AsinDto;
 import de.armbrust.planz.model.Inventory;
 import de.armbrust.planz.model.InventoryDto;
 import de.armbrust.planz.model.Product;
@@ -115,18 +114,6 @@ public class ProductService {
     }
 
 
-    public List<AsinDto> getAsinDtoListSortedMinInventory(List<AsinDto> asinDtoList) {
-
-        asinDtoList.sort((AsinDto o1, AsinDto o2) -> {
-            Integer amount1 = Collections.min(o1.getInventory(), Comparator.comparing(i -> i.getAmount())).getAmount();
-            Integer amount2 = Collections.min(o2.getInventory(), Comparator.comparing(i -> i.getAmount())).getAmount();
-            return amount1.compareTo(amount2);
-        });
-
-        return asinDtoList;
-    }
-
-
     public Optional<Product> addProduct(Product product) {
         if (!productMongoDb.existsById(product.getSku())) {
             productMongoDb.save(product);
@@ -163,7 +150,7 @@ public class ProductService {
         inventoryList.forEach(inventory -> findProductAndAddInventory(inventory));
     }
 
-    public String getNameByAsin(String asin) {
+    public String getTitleByAsin(String asin) {
         Product product = productMongoDb.findFirstByAsin(asin);
         return product.getTitle();
     }
