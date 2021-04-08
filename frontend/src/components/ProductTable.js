@@ -26,7 +26,6 @@ export default function ShowProductsInTable() {
         )
     }
 
-
     const sortExpected = () => {
         setAsinProductList(
             [...asinProductList].sort(function (a, b) {
@@ -56,7 +55,6 @@ export default function ShowProductsInTable() {
 
     return (
         <Wrapper>
-
             <table>
                 <thead>
                 <tr>
@@ -96,8 +94,14 @@ const Wrapper = styled.div`
     font-family: "Open Sans";
     outline: none;
   }
-
+  
   th {
+    z-index: 100;
+    position: sticky;
+    top: 0px;
+    border-width: 1px 0px 1px 1px;
+    border-style: solid;
+    border-color: white;
     background-color: orange;
     height: 80px;
     font-size: 1em;
@@ -105,16 +109,16 @@ const Wrapper = styled.div`
     font-family: "Open Sans";
   }
 
-  td, th {
+  td {
     border-style: dashed;
     border-width: 1px 0px 0px 0px;
     border-color: white;
     height: 80px;
     font-family: "Open Sans";
+    text-align: center;
   }
 
-
-  tr:hover {
+  tbody > tr:hover {
     background-color: grey;
     color: white;
   }
