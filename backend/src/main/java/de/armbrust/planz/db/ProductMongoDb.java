@@ -9,4 +9,7 @@ public interface ProductMongoDb extends PagingAndSortingRepository<Product, Stri
 
     List<Product> findAll();
 
+    List<Product> findAllByAsin(String asin);
+
+    Product findFirstByAsin(String asin);
 }

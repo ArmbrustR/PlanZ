@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Inventory {
 
-    private String date;
+    private String dateOfReport;
     private String asin;
     private String sku;
     private String amount;

@@ -3,6 +3,7 @@ package de.armbrust.planz.amazonapi;
 import com.amazon.spapi.documents.DownloadBundle;
 import com.amazon.spapi.documents.exception.CryptoException;
 import com.amazon.spapi.documents.exception.MissingCharsetException;
+import de.armbrust.planz.model.Inventory;
 import de.armbrust.planz.model.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ public class ReportParsingService {
                         .pendingQuantity(content[25])
                         .price(content[4])
                         .status(content[28])
+                        .inventory(new ArrayList<Inventory>())
                         .build();
 
                 products.add(tempProduct);
