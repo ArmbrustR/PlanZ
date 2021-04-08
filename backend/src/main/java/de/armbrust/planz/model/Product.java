@@ -7,10 +7,12 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @Document(collection = "products")
 public class Product {
 
@@ -23,5 +25,6 @@ public class Product {
     private String pendingQuantity;
     private String price;
     private String status;
+    private ArrayList<Inventory> inventory;
 
 }
