@@ -39,7 +39,7 @@ public class FileReaderInventory {
                 if (content.length == 7) {
 
                     Inventory inventory = Inventory.builder()
-                            .date(StringUtils.substring(content[0], 0, 10))
+                            .dateOfReport(StringUtils.substring(content[0], 0, 10))
                             .asin(content[1])
                             .sku(content[2])
                             .amount(content[3])

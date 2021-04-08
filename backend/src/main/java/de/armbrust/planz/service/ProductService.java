@@ -53,9 +53,9 @@ public class ProductService {
         Map<String, Integer> inventoryMap = new HashMap<>();
 
         allInventoryItems.stream().forEach(inventory -> {
-            Integer sum = inventoryMap.get(inventory.getDate());
+            Integer sum = inventoryMap.get(inventory.getDateOfReport());
             Integer updatedAmount = sum != null ? sum + parseInt(inventory.getAmount()) : parseInt(inventory.getAmount());
-            inventoryMap.put(inventory.getDate(), updatedAmount);
+            inventoryMap.put(inventory.getDateOfReport(), updatedAmount);
         });
 
         return inventoryMap;
