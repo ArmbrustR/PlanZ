@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -25,12 +26,12 @@ class ProductServiceTest {
 
     private final ProductMongoDb productMongoDb = mock(ProductMongoDb.class);
     private final AmazonApiHead amazonApiHead = mock(AmazonApiHead.class);
-    private final LocalFileReader localFileReader = mock(LocalFileReader.class);
-    private final ProductService productService = new ProductService(productMongoDb, amazonApiHead, localFileReader);
+    private final FileReaderInventory fileReaderInventory = mock(FileReaderInventory.class);
+    private final ProductService productService = new ProductService(productMongoDb, amazonApiHead, fileReaderInventory);
 
 
     @Test
-    @DisplayName("List Products should return list from DB")
+    @DisplayName("List of products should return list from DB")
     public void listProducts() {
         //GIVEN
         when(productMongoDb.findAll()).thenReturn(List.of(
@@ -149,7 +150,7 @@ class ProductServiceTest {
                 .condition("NEW")
                 .country("DE")
                 .amount("23")
-                .date("2021-02-25")
+                .dateOfReport("2021-02-25")
                 .sku("123")
                 .build();
 
@@ -181,7 +182,7 @@ class ProductServiceTest {
                 .condition("NEW")
                 .country("DE")
                 .amount("23")
-                .date("2021-02-25")
+                .dateOfReport("2021-02-25")
                 .sku("123")
                 .build();
 
@@ -195,7 +196,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("if inventory DataPoint is already available, it not be added")
+    @DisplayName("if inventory object already exists, it should not be added")
     public void IfProductHasInventoryPointAlreadyItShouldNotBeAdded() {
         //GIVEN
         Inventory inventory1 = Inventory.builder()
@@ -203,7 +204,7 @@ class ProductServiceTest {
                 .condition("NEW")
                 .country("DE")
                 .amount("23")
-                .date("2021-02-25")
+                .dateOfReport("2021-02-25")
                 .sku("123")
                 .build();
 
